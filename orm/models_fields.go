@@ -232,6 +232,18 @@ func (e *DateField) Set(d time.Time) {
 	*e = DateField(d)
 }
 
+func (e *DateField) MarshalJSON() ([]byte, error) {
+	//do your serializing here
+	stamp := fmt.Sprintf(`"%s"`, e.Value().Format(formatDate))
+	return []byte(stamp), nil
+}
+
+func (e *DateTimeField) MarshalJSON() ([]byte, error) {
+	//do your serializing here
+	stamp := fmt.Sprintf(`"%s"`, e.Value().Format(formatDateTime))
+	return []byte(stamp), nil
+}
+
 // String convert datatime to string
 func (e *DateField) String() string {
 	return e.Value().String()
