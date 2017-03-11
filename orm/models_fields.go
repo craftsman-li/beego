@@ -232,15 +232,17 @@ func (e *DateField) Set(d time.Time) {
 	*e = DateField(d)
 }
 
+// 对DateField 处理成时间戳
 func (e *DateField) MarshalJSON() ([]byte, error) {
 	//do your serializing here
-	stamp := fmt.Sprintf(`"%s"`, e.Value().Format(formatDate))
+	stamp := fmt.Sprintf(`%d`, e.Value().Unix())
 	return []byte(stamp), nil
 }
 
+// DateTimeField 处理成时间戳
 func (e *DateTimeField) MarshalJSON() ([]byte, error) {
 	//do your serializing here
-	stamp := fmt.Sprintf(`"%s"`, e.Value().Format(formatDateTime))
+	stamp := fmt.Sprintf(`%d`, e.Value().Unix())
 	return []byte(stamp), nil
 }
 
