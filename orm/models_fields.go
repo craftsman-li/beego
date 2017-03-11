@@ -16,6 +16,7 @@ package orm
 
 import (
 	"fmt"
+	"github.com/astaxie/beego/logs"
 	"strconv"
 	"time"
 )
@@ -239,11 +240,33 @@ func (e *DateField) MarshalJSON() ([]byte, error) {
 	return []byte(stamp), nil
 }
 
+func (e *DateField) UnmarshalJSON(data []byte) (err error) {
+	//do your serializing here
+	temp := string(data)
+	i, err := strconv.ParseInt(temp, 10, 64)
+	if nil != err {
+		logs.Error(temp)
+	}
+	e.Set(time.Unix(i, 0))
+	return nil
+}
+
 // DateTimeField 处理成时间戳
 func (e *DateTimeField) MarshalJSON() ([]byte, error) {
 	//do your serializing here
 	stamp := fmt.Sprintf(`%d`, e.Value().Unix())
 	return []byte(stamp), nil
+}
+
+func (e *DateTimeField) UnmarshalJSON(data []byte) (err error) {
+	//do your serializing here
+	temp := string(data)
+	i, err := strconv.ParseInt(temp, 10, 64)
+	if nil != err {
+		logs.Error(temp)
+	}
+	e.Set(time.Unix(i, 0))
+	return nil
 }
 
 // String convert datatime to string
