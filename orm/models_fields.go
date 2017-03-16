@@ -16,9 +16,10 @@ package orm
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/logs"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/logs"
 )
 
 // Define the Type enum
@@ -235,8 +236,12 @@ func (e *DateField) Set(d time.Time) {
 
 // 对DateField 处理成时间戳
 func (e *DateField) MarshalJSON() ([]byte, error) {
+	timestamp := e.Value().Unix()
+	if timestamp < 0 {
+		timestamp = 0
+	}
 	//do your serializing here
-	stamp := fmt.Sprintf(`%d`, e.Value().Unix())
+	stamp := fmt.Sprintf(`%d`, timestamp)
 	return []byte(stamp), nil
 }
 
@@ -253,8 +258,12 @@ func (e *DateField) UnmarshalJSON(data []byte) (err error) {
 
 // DateTimeField 处理成时间戳
 func (e *DateTimeField) MarshalJSON() ([]byte, error) {
+	timestamp := e.Value().Unix()
+	if timestamp < 0 {
+		timestamp = 0
+	}
 	//do your serializing here
-	stamp := fmt.Sprintf(`%d`, e.Value().Unix())
+	stamp := fmt.Sprintf(`%d`, timestamp)
 	return []byte(stamp), nil
 }
 
@@ -281,6 +290,9 @@ func (e *DateField) FieldType() int {
 
 // SetRaw convert the interface to time.Time. Allow string and time.Time
 func (e *DateField) SetRaw(value interface{}) error {
+	if nil == value {
+		return nil
+	}
 	switch d := value.(type) {
 	case time.Time:
 		e.Set(d)
@@ -331,6 +343,9 @@ func (e *DateTimeField) FieldType() int {
 
 // SetRaw convert the string or time.Time to DateTimeField
 func (e *DateTimeField) SetRaw(value interface{}) error {
+	if nil == value {
+		return nil
+	}
 	switch d := value.(type) {
 	case time.Time:
 		e.Set(d)
