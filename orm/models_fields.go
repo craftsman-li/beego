@@ -19,6 +19,10 @@ import (
 	"strconv"
 	"time"
 
+	"errors"
+
+	"strings"
+
 	"github.com/astaxie/beego/logs"
 )
 
@@ -250,9 +254,17 @@ func (e *DateField) UnmarshalJSON(data []byte) (err error) {
 	temp := string(data)
 	i, err := strconv.ParseInt(temp, 10, 64)
 	if nil != err {
-		logs.Error(temp)
+		logs.Error("date field parse failed. cause: %v, now -> attemp parse string ---", temp)
+		temp = strings.Replace(temp, "\"", "", -1)
+		ttt, err := time.Parse("2006-01-02", temp)
+		if nil != err {
+			logs.Error("parse date failed. ", temp, err)
+			return errors.New("time unmarshal failed. ")
+		}
+		e.Set(ttt)
+	} else {
+		e.Set(time.Unix(i, 0))
 	}
-	e.Set(time.Unix(i, 0))
 	return nil
 }
 
