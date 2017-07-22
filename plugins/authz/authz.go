@@ -17,7 +17,7 @@
 //	import(
 //		"github.com/astaxie/beego"
 //		"github.com/astaxie/beego/plugins/authz"
-//		"github.com/hsluoyz/casbin"
+//		"github.com/casbin/casbin"
 //	)
 //
 //	func main(){
