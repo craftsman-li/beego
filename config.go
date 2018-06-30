@@ -180,10 +180,10 @@ func recoverPanic(ctx *context.Context) {
 
 func newBConfig() *Config {
 	return &Config{
-		AppName:             "beego",
+		AppName:             "tiny",
 		RunMode:             DEV,
 		RouterCaseSensitive: true,
-		ServerName:          "beegoServer:" + VERSION,
+		ServerName:          "tiny:" + VERSION,
 		RecoverPanic:        true,
 		RecoverFunc:         recoverPanic,
 		CopyRequestBody:     false,
@@ -226,7 +226,7 @@ func newBConfig() *Config {
 			Session: SessionConfig{
 				SessionOn:                    false,
 				SessionProvider:              "memory",
-				SessionName:                  "beegosessionID",
+				SessionName:                  "tinysessionID",
 				SessionGCMaxLifetime:         3600,
 				SessionProviderConfig:        "",
 				SessionDisableHTTPOnly:       false,
@@ -234,7 +234,7 @@ func newBConfig() *Config {
 				SessionAutoSetCookie:         true,
 				SessionDomain:                "",
 				SessionEnableSidInHTTPHeader: false, //	enable store/get the sessionId into/from http headers
-				SessionNameInHTTPHeader:      "Beegosessionid",
+				SessionNameInHTTPHeader:      "Tinysessionid",
 				SessionEnableSidInURLQuery:   false, //	enable get the sessionId from Url Query params
 			},
 		},

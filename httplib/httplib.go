@@ -53,7 +53,7 @@ import (
 )
 
 var defaultSetting = BeegoHTTPSettings{
-	UserAgent:        "beegoServer",
+	UserAgent:        "tiny",
 	ConnectTimeout:   60 * time.Second,
 	ReadWriteTimeout: 60 * time.Second,
 	Gzip:             true,
