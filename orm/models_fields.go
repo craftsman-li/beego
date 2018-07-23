@@ -29,6 +29,7 @@ import (
 // Define the Type enum
 const (
 	TypeBooleanField = 1 << iota
+	TypeVarCharField
 	TypeCharField
 	TypeTextField
 	TypeTimeField
@@ -55,9 +56,9 @@ const (
 
 // Define some logic enum
 const (
-	IsIntegerField         = ^-TypePositiveBigIntegerField >> 5 << 6
-	IsPositiveIntegerField = ^-TypePositiveBigIntegerField >> 9 << 10
-	IsRelField             = ^-RelReverseMany >> 17 << 18
+	IsIntegerField         = ^-TypePositiveBigIntegerField >> 6 << 7
+	IsPositiveIntegerField = ^-TypePositiveBigIntegerField >> 10 << 11
+	IsRelField             = ^-RelReverseMany >> 18 << 19
 	IsFieldType            = ^-RelReverseMany<<1 + 1
 )
 
@@ -91,7 +92,7 @@ func (e *BooleanField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Bool()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
 		return err
@@ -132,7 +133,7 @@ func (e *CharField) String() string {
 
 // FieldType return the enum type
 func (e *CharField) FieldType() int {
-	return TypeCharField
+	return TypeVarCharField
 }
 
 // SetRaw set the interface to string
@@ -196,7 +197,7 @@ func (e *TimeField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := timeParse(d, formatTime)
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
 		return err
@@ -310,7 +311,7 @@ func (e *DateField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := timeParse(d, formatDate)
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
 		return err
@@ -333,12 +334,12 @@ var _ Fielder = new(DateField)
 // Takes the same extra arguments as DateField.
 type DateTimeField time.Time
 
-// Value return the datatime value
+// Value return the datetime value
 func (e DateTimeField) Value() time.Time {
 	return time.Time(e)
 }
 
-// Set set the time.Time to datatime
+// Set set the time.Time to datetime
 func (e *DateTimeField) Set(d time.Time) {
 	*e = DateTimeField(d)
 }
@@ -363,7 +364,7 @@ func (e *DateTimeField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := timeParse(d, formatDateTime)
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
 		return err
@@ -373,12 +374,12 @@ func (e *DateTimeField) SetRaw(value interface{}) error {
 	return nil
 }
 
-// RawValue return the datatime value
+// RawValue return the datetime value
 func (e *DateTimeField) RawValue() interface{} {
 	return e.Value()
 }
 
-// verify datatime implement fielder
+// verify datetime implement fielder
 var _ Fielder = new(DateTimeField)
 
 // FloatField A floating-point number represented in go by a float32 value.
@@ -413,9 +414,10 @@ func (e *FloatField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Float64()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<FloatField.SetRaw> unknown value `%s`", value)
 	}
@@ -460,9 +462,10 @@ func (e *SmallIntegerField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Int16()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<SmallIntegerField.SetRaw> unknown value `%s`", value)
 	}
@@ -507,9 +510,10 @@ func (e *IntegerField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Int32()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<IntegerField.SetRaw> unknown value `%s`", value)
 	}
@@ -554,9 +558,10 @@ func (e *BigIntegerField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Int64()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<BigIntegerField.SetRaw> unknown value `%s`", value)
 	}
@@ -601,9 +606,10 @@ func (e *PositiveSmallIntegerField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Uint16()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<PositiveSmallIntegerField.SetRaw> unknown value `%s`", value)
 	}
@@ -648,9 +654,10 @@ func (e *PositiveIntegerField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Uint32()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<PositiveIntegerField.SetRaw> unknown value `%s`", value)
 	}
@@ -695,9 +702,10 @@ func (e *PositiveBigIntegerField) SetRaw(value interface{}) error {
 		e.Set(d)
 	case string:
 		v, err := StrTo(d).Uint64()
-		if err != nil {
+		if err == nil {
 			e.Set(v)
 		}
+		return err
 	default:
 		return fmt.Errorf("<PositiveBigIntegerField.SetRaw> unknown value `%s`", value)
 	}
